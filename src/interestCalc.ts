@@ -12,8 +12,8 @@ const totalAccruedAmount = (p: number, t: number, i: number): number => {
   return rounded;
 };
 
-const testAmount = totalAccruedAmount(20, 345, 12);
-console.log(testAmount);
+// const testAmount = totalAccruedAmount(20, 345, 12);
+// console.log(testAmount);
 
 module.exports = totalAccruedAmount;
 

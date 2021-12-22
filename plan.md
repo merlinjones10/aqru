@@ -42,6 +42,16 @@ use TDD
 
 - Write test for num of days (i.e input converted to length)
 - - Write test for num of days inc. separate rates. i.e return obj {high: (12 days), low: 79 (days)} ,
+    PLAN
+    Get input from a user
+    Format input to Date type
+    GET distance betweetn the two dates in calendar days
+
+Create an interval that represents the different interest periods, possibly over a number of years
+Get an array of ALL DATES between the input dates
+LOOP through the array, if it matches a date within the specified period + 1 to low, if not +1 to high
+Low and high should equal initial distance (above)
+Use low and high as 'TIME' in the calc function then + together
 
 ## COMBINE
 

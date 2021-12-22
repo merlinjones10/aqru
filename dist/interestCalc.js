@@ -11,8 +11,8 @@ const totalAccruedAmount = (p, t, i) => {
     const rounded = roundNumber2DecPlace(amount);
     return rounded;
 };
-const testAmount = totalAccruedAmount(20, 345, 12);
-console.log(testAmount);
+// const testAmount = totalAccruedAmount(20, 345, 12);
+// console.log(testAmount);
 module.exports = totalAccruedAmount;
 // p = Principal Amount
 // i = Interest Amount (non decimal form)

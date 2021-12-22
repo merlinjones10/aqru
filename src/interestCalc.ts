@@ -15,7 +15,7 @@ const totalAccruedAmount = (p: number, t: number, i: number): number => {
 // const testAmount = totalAccruedAmount(20, 345, 12);
 // console.log(testAmount);
 
-module.exports = totalAccruedAmount;
+export { totalAccruedAmount };
 
 // p = Principal Amount
 // i = Interest Amount (non decimal form)

@@ -3,17 +3,17 @@ const getOverlappingDaysInIntervals = require('date-fns/getOverlappingDaysInInte
 const eachYearOfInterval = require('date-fns/eachYearOfInterval');
 const addYears = require('date-fns/addYears');
 const getYear = require('date-fns/getYear');
-
-interface Interval {
-  start: Date;
-  end: Date;
-}
+import { totalAccruedAmount } from './interestCalc';
 
 type investedStats = {
   total: number;
   hi: number;
   lo: number;
 };
+interface Interval {
+  start: Date;
+  end: Date;
+}
 
 class Interval {
   constructor(start: Date, end: Date) {
@@ -24,25 +24,28 @@ class Interval {
     return eachYearOfInterval({ start: this.start, end: this.end });
   }
 }
-// (Start, End)
-const lowInterestPeriod = new Interval(new Date(2021, 0, 1), new Date(2021, 3, 20));
-const highInterestPeriod = new Interval(new Date(2021, 3, 21), new Date(2021, 11, 30));
-// Invest from the 1st of April to 10th of May
-const investedDates = new Interval(new Date(2021, 3, 1), new Date(2023, 4, 10));
 
-// LOOP to create all possible low interest periods
-const allLowInterestPeriods: any = [];
-for (let i = 0; i < investedDates.years().length; i++) {
-  let year = getYear(investedDates.years()[i]);
-  // BUG, Check month formatting. adding one to the month?
-  let lowInterestPeriod = new Interval(new Date(year, 0, 1), new Date(year, 3, 20));
-  allLowInterestPeriods.push(lowInterestPeriod);
-}
+const getAllLowPeriods = (investedDates: Interval) => {
+  // LOOP to create all possible low interest periods
+  let allLowInterestPeriods: Interval[] = [];
+  for (let i = 0; i < investedDates.years().length; i++) {
+    let year = getYear(investedDates.years()[i]);
+    // BUG, Check month formatting. adding one to the month?
+    let lowInterestPeriod = new Interval(new Date(year, 0, 1), new Date(year, 3, 20));
+    allLowInterestPeriods.push(lowInterestPeriod);
+  }
+  //   console.log(allLowInterestPeriods);
+  return allLowInterestPeriods;
+};
+// Invest from the 1st of April 21 to 10th of May 23
+const myInvestedDates = new Interval(new Date(2021, 3, 1), new Date(2023, 4, 10));
+
+const allLowPeriods = getAllLowPeriods(myInvestedDates);
 const daysInvested = (investedDates: Interval): investedStats => {
   let lowInterestTotalDays = 0;
-  for (let i = 0; i < allLowInterestPeriods.length; i++) {
+  for (let i = 0; i < allLowPeriods.length; i++) {
     lowInterestTotalDays += getOverlappingDaysInIntervals(
-      { start: allLowInterestPeriods[i].start, end: allLowInterestPeriods[i].end },
+      { start: allLowPeriods[i].start, end: allLowPeriods[i].end },
       { start: investedDates.start, end: investedDates.end }
     );
   }
@@ -51,8 +54,18 @@ const daysInvested = (investedDates: Interval): investedStats => {
   return { total: totalDays, hi: highInterestDays, lo: lowInterestTotalDays };
 };
 
-let totalStats = daysInvested(investedDates);
-console.log(totalStats);
+let totalStats = daysInvested(myInvestedDates);
+const initialInvestment = 1000;
+const highPeriod = totalAccruedAmount(initialInvestment, totalStats.hi, 13.5);
+const lowPeriod = totalAccruedAmount(initialInvestment, totalStats.lo, 12);
+const totalAmountRetured = highPeriod + lowPeriod;
+console.log(totalAmountRetured);
+console.log(
+  `${totalAmountRetured} from ${initialInvestment} investment over ${totalStats.total} days`
+);
+console.log(
+  `Days invested total: ${totalStats.total} \nDays in high interest ${totalStats.hi} \nDays in low interest ${totalStats.lo}`
+);
 module.exports = daysInvested;
 
 // PLAN

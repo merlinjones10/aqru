@@ -1,4 +1,6 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.totalAccruedAmount = void 0;
 const roundNumber2DecPlace = (amount) => {
     return Math.round(amount * 100) / 100;
 };
@@ -11,9 +13,7 @@ const totalAccruedAmount = (p, t, i) => {
     const rounded = roundNumber2DecPlace(amount);
     return rounded;
 };
-// const testAmount = totalAccruedAmount(20, 345, 12);
-// console.log(testAmount);
-module.exports = totalAccruedAmount;
+exports.totalAccruedAmount = totalAccruedAmount;
 // p = Principal Amount
 // i = Interest Amount (non decimal form)
 // t = time in days

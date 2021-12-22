@@ -10,14 +10,14 @@ test('gets total return from amount invested', () => {
 test('gets total return from amount invested', () => {
   expect(totalAccruedAmount(20, 345, 13.5)).toBeCloseTo(22.55);
 });
-// DATES
-const start = new Date(2020, 6, 1);
-const end = new Date(2020, 6, 4);
-const interval = {
-  start: start,
-  end: end,
-};
+// DATES --> Refactor, now returns Hi and Lo investment days
+// const start = new Date(2020, 6, 1);
+// const end = new Date(2020, 6, 4);
+// const interval = {
+//   start: start,
+//   end: end,
+// };
 
-test('gets total return from amount invested', () => {
-  expect(daysInvested(interval)).toBe(3);
-});
+// test('gets total return from amount invested', () => {
+//   expect(daysInvested(interval)).toBe(3);
+// });

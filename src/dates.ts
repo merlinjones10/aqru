@@ -1,8 +1,16 @@
-var differenceInCalendarDays = require('date-fns/differenceInCalendarDays');
+const differenceInCalendarDays = require('date-fns/differenceInCalendarDays');
+const getOverlappingDaysInIntervals = require('date-fns/getOverlappingDaysInIntervals');
+const differenceInCalendarYears = require('date-fns/differenceInCalendarYears');
 
 interface Interval {
   start: Date;
   end: Date;
+}
+
+type investedStats {
+    total: number
+    hi: number
+    lo: number
 }
 
 class Interval {
@@ -10,24 +18,38 @@ class Interval {
     this.start = start;
     this.end = end;
   }
+  years() {
+    return differenceInCalendarYears(this.end, this.start);
+  }
 }
+// (Start, End)
+const lowInterestPeriod = new Interval(new Date(2021, 0, 1), new Date(2021, 3, 20));
+const highInterestPeriod = new Interval(new Date(2021, 3, 21), new Date(2021, 11, 30));
+// Invest from the 1st of April to 10th of May
+const investedDates = new Interval(new Date(2021, 3, 1), new Date(2021, 4, 10));
+//
+const lowInterestDays = getOverlappingDaysInIntervals(
+  { start: lowInterestPeriod.start, end: lowInterestPeriod.end },
+  { start: investedDates.start, end: investedDates.end }
+);
 
-const start = new Date(2020, 6, 1);
-const end = new Date(2020, 6, 4);
-const investedDates = new Interval(start, end);
+const daysInvested = (investedDates: Interval) : investedStats => {
+  const lowInterestDays = getOverlappingDaysInIntervals(
+    { start: lowInterestPeriod.start, end: lowInterestPeriod.end },
+    { start: investedDates.start, end: investedDates.end }
+  );
+  const totalDays = differenceInCalendarDays(investedDates.end, investedDates.start);
+  const highInterestDays = totalDays - lowInterestDays;
 
-const daysInvested = (investedDates: Interval): number => {
-  return differenceInCalendarDays(investedDates.end, investedDates.start);
+  return { total: totalDays, hi: highInterestDays, lo: lowInterestDays };
 };
 
+console.log(daysInvested(investedDates))
 module.exports = daysInvested;
-
-// console.log();
 // PLAN
 /* ------------------------ // Get input from a user ------------------------ */
 // Format input to Date type
 // GET distance betweetn the two dates in calendar days
-
 // Create an interval that represents the different interest periods, possibly over a number of years
 // Get an array of ALL DATES between the input dates
 // LOOP through the array, if it matches a date within the specified period + 1 to low, if not +1 to high

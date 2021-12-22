@@ -1,19 +1,31 @@
 "use strict";
-var differenceInCalendarDays = require('date-fns/differenceInCalendarDays');
+const differenceInCalendarDays = require('date-fns/differenceInCalendarDays');
+const getOverlappingDaysInIntervals = require('date-fns/getOverlappingDaysInIntervals');
+const differenceInCalendarYears = require('date-fns/differenceInCalendarYears');
 class Interval {
     constructor(start, end) {
         this.start = start;
         this.end = end;
     }
+    years() {
+        return differenceInCalendarYears(this.end, this.start);
+    }
 }
-const start = new Date(2020, 6, 1);
-const end = new Date(2020, 6, 4);
-const investedDates = new Interval(start, end);
+// (Start, End)
+const lowInterestPeriod = new Interval(new Date(2021, 0, 1), new Date(2021, 3, 20));
+const highInterestPeriod = new Interval(new Date(2021, 3, 21), new Date(2021, 11, 30));
+// Invest from the 1st of April to 10th of May
+const investedDates = new Interval(new Date(2021, 3, 1), new Date(2021, 4, 10));
+//
+const lowInterestDays = getOverlappingDaysInIntervals({ start: lowInterestPeriod.start, end: lowInterestPeriod.end }, { start: investedDates.start, end: investedDates.end });
 const daysInvested = (investedDates) => {
-    return differenceInCalendarDays(investedDates.end, investedDates.start);
+    const lowInterestDays = getOverlappingDaysInIntervals({ start: lowInterestPeriod.start, end: lowInterestPeriod.end }, { start: investedDates.start, end: investedDates.end });
+    const totalDays = differenceInCalendarDays(investedDates.end, investedDates.start);
+    const highInterestDays = totalDays - lowInterestDays;
+    return { total: totalDays, hi: highInterestDays, lo: lowInterestDays };
 };
+console.log(daysInvested(investedDates));
 module.exports = daysInvested;
-// console.log();
 // PLAN
 /* ------------------------ // Get input from a user ------------------------ */
 // Format input to Date type

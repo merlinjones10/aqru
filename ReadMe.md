@@ -1,7 +1,8 @@
 # First
 
-npm install
-dependencies: jest, date-fns
+#### npm install
+
+- dependencies: jest, date-fns
 
 # To run tests:
 
